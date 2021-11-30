@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+// import Layout from '@/custom-ui/router'
 
 /* Router Modules */
 import componentsRouter from './modules/components'
@@ -70,6 +71,7 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/401'),
     hidden: true
   },
+
   {
     path: '/',
     component: Layout,
@@ -340,6 +342,7 @@ export const asyncRoutes = [
       }
     ]
   },
+
   {
     path: '/pdf/download',
     component: () => import('@/views/pdf/download'),
