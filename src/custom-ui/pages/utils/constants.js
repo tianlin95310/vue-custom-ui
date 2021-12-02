@@ -1,5 +1,5 @@
 export const properTypes = [
-  'text', 'operate'
+  'text', 'operate', 'input'
 ]
 
 export const dataTypes = [
@@ -40,6 +40,19 @@ export const createdMethods = [
   {
     label: 'mounted',
     value: 'mounted'
+  }
+]
+
+export const operateTypes = [
+  {
+    label: '打开界面',
+    value: 'push',
+    placeHolder: '请输入界面的路由'
+  },
+  {
+    label: '调用接口',
+    value: 'http',
+    placeHolder: '请输入调用的接口'
   }
 ]
 

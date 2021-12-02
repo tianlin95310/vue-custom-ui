@@ -8,8 +8,10 @@
       <el-tabs tab-position="left">
         <el-tab-pane v-for="(group, index) in templates" :key="index" :label="group.groupName" class="group">
           <el-card v-for="(template, j) in group.items" :key="j" class="component">
-            <el-tag type="primary" effect="dark">{{ template.name }}</el-tag>
-            <el-button type="success" size="mini" @click="onTemplateSelect(template)">我选这个</el-button>
+            <div class="operate">
+              <el-tag type="primary" effect="dark">{{ template.name }}</el-tag>
+              <el-button type="text" size="small" @click="onTemplateSelect(template)">我选这个</el-button>
+            </div>
             <component :is="template.component" :data="template.data" :configs="template.configs" />
           </el-card>
         </el-tab-pane>
@@ -62,14 +64,18 @@ export default {
                       type: 'text',
                       prop: 'more',
                       title: '...'
-                    },
+                    }
+                  ]
+                },
+                operateKeys: {
+                  title: '操作栏属性设置',
+                  show: false,
+                  type: 3,
+                  actions: [
                     {
-                      type: 'operate',
-                      prop: 'col3',
-                      title: '操作',
-                      actions: [
-                        '删除'
-                      ]
+                      title: '删除',
+                      url: '',
+                      params: []
                     }
                   ]
                 },
@@ -159,6 +165,9 @@ export default {
     .component {
       margin-bottom: 20px;
       overflow-y: auto;
+      .operate {
+        margin-bottom: 10px;
+      }
 
       .el-button {
         margin-left: 16px;

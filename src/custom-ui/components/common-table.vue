@@ -4,24 +4,20 @@
     :data="tableData"
     :span-method="arraySpanMethod"
     border
-    style="width: 98%;margin: 16px 1%;"
   >
     <el-table-column v-for="(col, index) in dataKeys" :key="index" :prop="col.prop" :label="col.title">
       <template slot-scope="scope">
         <span v-if="col.type === 'text'">{{ scope.row[col.prop] }}</span>
-        <el-input v-else-if="col.type == 'input'" v-model="scope.row[col.prop]" />
-        <div v-else-if="col.type === 'operate'">
-          <el-button
-            v-for="(action, aIndex) in col.actions"
-            :key="aIndex"
-            type="text"
-            size="mini"
-            @click="onActionClick(aIndex, scope.row)"
-          >
-            {{ action }}
-          </el-button>
-        </div>
+        <el-input v-else-if="col.type == 'input'" v-model="scope.row[col.prop]" placeholder="请输入内容" />
         <slot v-else name="custom" :data="{row: scope.row, col: col}" />
+      </template>
+    </el-table-column>
+
+    <el-table-column v-if="operateKeys.show" label="操作">
+      <template slot-scope="scope">
+        <el-button v-for="(bt, bi) in operateKeys.actions" :key="bi" @click="onActionClick(scope.row, bt)">
+          {{ bt.title }}
+        </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -51,17 +47,11 @@ export default {
         type: String,
         default: ''
       },
-      tableData: {
-        type: Array,
-        default() {
-          return []
-        }
-      },
-      dataKeys: {
-        type: Array,
-        default() {
-          return []
-        }
+      tableData: [],
+      dataKeys: [],
+      operateKeys: {
+        show: false,
+        actions: []
       }
     }
   },
@@ -70,7 +60,8 @@ export default {
     this.spanKey = this.data.spanKey
     this.tableData = this.data.list
     this.dataKeys = this.configs.dataColKeys.items
-    console.log(this.dataKeys, this.tableData)
+    this.operateKeys = this.configs.operateKeys
+    console.log('table config---', this.configs)
     if (this.spanKey) {
       this.spanArray = this.getSpanArray()
     }
@@ -106,8 +97,8 @@ export default {
         }
       }
     },
-    onActionClick(index, row) {
-      this.$emit('onActionClick', { index: index, row: row })
+    onActionClick(row, bt) {
+      this.$emit('onActionClick', { dataSource: row, action: bt })
     }
   }
 }

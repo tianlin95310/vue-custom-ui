@@ -10,7 +10,7 @@
       <div>
         <el-input
           v-if="inputVisible"
-          ref="saveTagInput"
+          ref="addDataInput"
           v-model="inputValue"
           class="input-item-width"
           size="small"
@@ -60,7 +60,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="产生时机" width="100">
+        <el-table-column label="产生时机" width="120">
           <template slot-scope="scope">
             <el-select v-model="scope.row.createdMethod" size="mini" placeholder="请选择">
               <el-option
@@ -141,6 +141,9 @@ export default {
     showInput() {
       this.inputValue = ''
       this.inputVisible = true
+      this.$nextTick(() => {
+        this.$refs.addDataInput.focus()
+      })
     },
     show(pageData) {
       this.pageData = pageData ?? {}

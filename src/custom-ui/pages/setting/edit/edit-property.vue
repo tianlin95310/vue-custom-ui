@@ -11,9 +11,9 @@
         <el-tag v-if="group.name">{{ group.name }}</el-tag>
         <div class="property-item">
           <div><el-tag closable @close="onItemClose(index)">{{ group.title }}</el-tag></div>
-          <div><el-input v-model="group.prop" class="input-item-width" size="small" place-holder="请输入" /></div>
+          <div><el-input v-model="group.prop" class="input-item-width" size="mini" placeholder="请输入key值" /></div>
           <div>
-            <el-select v-model="group.type" placeholder="请选择" size="small" class="input-item-width">
+            <el-select v-model="group.type" placeholder="请选择" size="mini" class="input-item-width">
               <el-option v-for="(item, oindex) in properTypes" :key="oindex" :label="item" :value="item" />
             </el-select>
           </div>
@@ -21,7 +21,7 @@
       </div>
       <el-input
         v-if="inputVisible"
-        ref="saveTagInput"
+        ref="addInput"
         v-model="inputValue"
         class="input-item-width"
         size="mini"
@@ -29,7 +29,7 @@
         @keyup.enter.native="handleInputConfirm"
         @blur="handleInputConfirm"
       />
-      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新属性</el-button>
+      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加列</el-button>
     </div>
   </el-drawer>
 </template>
@@ -54,11 +54,18 @@ export default {
     showInput() {
       this.inputVisible = true
       this.inputValue = ''
+      this.$nextTick(() => {
+        this.$refs.addInput.focus()
+      })
     },
     onItemClose(index) {
       this.config.items.splice(index, 1)
     },
     handleInputConfirm() {
+      if (!this.inputValue) {
+        this.inputVisible = false
+        return
+      }
       this.config.items.push({
         title: this.inputValue,
         prop: '',
@@ -79,7 +86,7 @@ export default {
   padding: 16px 10px;
 
   .input-item-width {
-    width: 80px;
+    width: 100px;
     vertical-align: top;
   }
 
@@ -88,7 +95,10 @@ export default {
     vertical-align: top;
 
     .property-item {
-      margin-right: 10px;
+      padding: 5px;
+      border: 1px solid gainsboro;
+      margin-right: 5px;
+      border-radius: 8px;
 
       > div {
         margin-bottom: 10px;

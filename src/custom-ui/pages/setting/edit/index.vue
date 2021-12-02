@@ -17,7 +17,7 @@
           {{ config.title }}
         </el-button>
       </div>
-      <component :is="comp.component" :data="comp.data" :configs="comp.configs" />
+      <component :is="comp.component" :data="comp.data" :configs="comp.configs" @onActionClick="onActionClick" />
       <div class="add-component"><el-button @click="addComponent(index + 1)">添加</el-button></div>
     </div>
     <choose-template ref="chooseDrawer" @choose="onTemplateSelect" />
@@ -27,6 +27,8 @@
     <edit-config ref="editConfig" @save="saveConfig" />
 
     <edit-page-data ref="editPageData" @updateData="updateData" />
+
+    <edit-operate ref="editOperate" />
   </div>
 </template>
 
@@ -35,6 +37,7 @@ import ChooseTemplate from './choose-template'
 import EditProperty from './edit-property'
 import EditConfig from './edit-config'
 import EditPageData from './edit-page-data'
+import EditOperate from './edit-operate'
 export default {
   name: 'Edit',
   pageId: '',
@@ -42,7 +45,8 @@ export default {
     EditProperty,
     ChooseTemplate,
     EditConfig,
-    EditPageData
+    EditPageData,
+    EditOperate
   },
   data() {
     return {
@@ -79,7 +83,6 @@ export default {
     comps.forEach(item => {
       if (item.dataSourceKey) {
         item.data[item.dataKey] = pageData[item.dataSourceKey].data
-        console.log('item', item)
       }
     })
     console.log('this.pageData---', pageData)
@@ -88,6 +91,23 @@ export default {
     this.page = page
   },
   methods: {
+    onActionClick({ dataSource, action }) {
+      console.log('onActionClick---', dataSource, action)
+      if (action.operateType === 'push') {
+        this.$router.push({
+          path: '/setting/edit',
+          query: {
+            id: window.btoa(action.url)
+          }
+        })
+      } else {
+        const req = {}
+        action.params.forEach(item => {
+          req[item] = dataSource[item]
+        })
+        this.$http.post(action.url, req).then(res => {})
+      }
+    },
     updateData(pageData) {
       this.page.pageData = pageData
     },
@@ -100,6 +120,8 @@ export default {
         this.$refs.editProperty.show(config)
       } else if (config.type === 2) {
         this.$refs.editConfig.show(config, key, index)
+      } else if (config.type === 3) {
+        this.$refs.editOperate.show(config)
       }
     },
     saveConfig({ config, index, key }) {},

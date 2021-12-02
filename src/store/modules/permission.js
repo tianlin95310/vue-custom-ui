@@ -2,7 +2,7 @@ import {
   constantRoutes
 } from '@/router'
 import Layout from '@/layout'
-
+import LayoutCustom from '@/custom-ui/layout'
 /**
  * Use meta.role to determine if the current user has permission
  * @param roles
@@ -40,7 +40,7 @@ function getRouterByRemote(menus) {
     if (menu.menuType === 1) {
       const Arouter = {
         path: menu.link,
-        component: Layout,
+        component: menu.container === 'custom' ? LayoutCustom : Layout,
         name: menu.name,
         meta: {
           title: menu.name
