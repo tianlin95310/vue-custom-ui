@@ -29,6 +29,14 @@ export const dataSources = [
   {
     label: '外部接口',
     value: 'OuterHttp'
+  },
+  {
+    label: '页面表单',
+    value: 'form'
+  },
+  {
+    label: '路由传参',
+    value: 'query'
   }
 ]
 
@@ -53,6 +61,25 @@ export const operateTypes = [
     label: '调用接口',
     value: 'http',
     placeHolder: '请输入调用的接口'
+  }
+]
+
+export const formItems = [
+  {
+    label: '输入框',
+    value: 'el-input'
+  },
+  {
+    label: '开关',
+    value: 'el-switch'
+  },
+  {
+    label: '进度条',
+    value: 'el-slider'
+  },
+  {
+    label: '选择框',
+    value: 'el-select'
   }
 ]
 

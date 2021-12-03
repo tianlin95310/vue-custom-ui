@@ -25,12 +25,12 @@
       <el-table :data="datas">
         <el-table-column prop="key" label="key" width="160">
           <template slot-scope="scope">
-            <el-input v-model="scope.row.key" size="mini" placeholder="请输入数据的key" />
+            <el-input v-model="scope.row.key" :disabled="scope.row.disabled" size="mini" placeholder="请输入数据的key" />
           </template>
         </el-table-column>
         <el-table-column label="数据类型" width="120">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.dataType" size="mini" placeholder="请选择">
+            <el-select v-model="scope.row.dataType" :disabled="scope.row.disabled" size="mini" placeholder="请选择">
               <el-option
                 v-for="item in dataTypes"
                 :key="item.value"
@@ -43,7 +43,7 @@
 
         <el-table-column label="数据来源" width="120">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.dataSource" size="mini" placeholder="请选择">
+            <el-select v-model="scope.row.dataSource" :disabled="scope.row.disabled" size="mini" placeholder="请选择">
               <el-option
                 v-for="item in dataSources"
                 :key="item.value"
@@ -54,15 +54,15 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="接口名称">
+        <el-table-column label="url或者值">
           <template slot-scope="scope">
-            <el-input v-if="scope.row.dataSource === 'InnerHttp'" v-model="scope.row.url" size="mini" />
+            <el-input v-model="scope.row.url" :disabled="scope.row.disabled" size="mini" />
           </template>
         </el-table-column>
 
         <el-table-column label="产生时机" width="120">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.createdMethod" size="mini" placeholder="请选择">
+            <el-select v-model="scope.row.createdMethod" :disabled="scope.row.disabled" size="mini" placeholder="请选择">
               <el-option
                 v-for="item in createdMethods"
                 :key="item.value"
@@ -75,7 +75,7 @@
 
         <el-table-column label="操作" width="80">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="deleteDataItem(scope.row)">删除</el-button>
+            <el-button :disabled="scope.row.disabled" type="text" size="small" @click="deleteDataItem(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -108,7 +108,8 @@ export default {
             dataType: item.dataType,
             dataSource: item.dataSource,
             url: item.url,
-            createdMethod: item.createdMethod
+            createdMethod: item.createdMethod,
+            disabled: item.disabled
           }
         })
       },
@@ -117,7 +118,7 @@ export default {
   },
   methods: {
     handleClose() {
-      this.$emit('updateData', this.pageData)
+      this.$emit('save', this.pageData)
       this.showDrawer = false
     },
     deleteDataItem(row) {
@@ -134,7 +135,8 @@ export default {
         dataType: dataTypes[0].value,
         dataSource: dataSources[0].value,
         url: '',
-        createdMethod: createdMethods[0].value
+        createdMethod: createdMethods[0].value,
+        disabled: false
       })
       this.inputVisible = false
     },
@@ -154,7 +156,8 @@ export default {
           url: pageData[key].url,
           dataType: pageData[key].dataType,
           dataSource: pageData[key].dataSource,
-          createdMethod: pageData[key].createdMethod
+          createdMethod: pageData[key].createdMethod,
+          disabled: pageData[key].disabled
         })
       }
       this.datas = datas

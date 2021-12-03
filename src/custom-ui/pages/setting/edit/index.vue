@@ -1,6 +1,6 @@
 <template>
   <div class="app-container edit">
-    <el-button type="primary" @click="savePageData">保存</el-button>
+    <el-button type="primary" @click="savePage">保存</el-button>
 
     <el-button type="primary" @click="editPageDataSource">页面数据源</el-button>
 
@@ -24,30 +24,38 @@
 
     <edit-property ref="editProperty" @save="saveProperty" />
 
-    <edit-config ref="editConfig" @save="saveConfig" />
+    <edit-css-config2 ref="editConfig" @save="saveConfig" />
 
-    <edit-page-data ref="editPageData" @updateData="updateData" />
+    <edit-page-data ref="editPageData" @save="savePageData" />
 
-    <edit-operate ref="editOperate" />
+    <edit-operate ref="editOperate" @save="saveOperate" />
+
+    <edit-form-type4 ref="editForm" @save="saveForm" />
   </div>
 </template>
 
 <script>
 import ChooseTemplate from './choose-template'
-import EditProperty from './edit-property'
-import EditConfig from './edit-config'
-import EditPageData from './edit-page-data'
-import EditOperate from './edit-operate'
+import EditPageData from './components/edit-page-data'
+import EditProperty from './components/edit-property'
+import EditCssConfig2 from './components/edit-css-config2'
+import EditOperate from './components/edit-operate'
+import overview from '@/custom-ui/mixins/overview'
+import EditFormType4 from './components/edit-form-type4'
 export default {
   name: 'Edit',
   pageId: '',
   components: {
-    EditProperty,
+    EditCssConfig2,
     ChooseTemplate,
-    EditConfig,
     EditPageData,
-    EditOperate
+    EditProperty,
+    EditOperate,
+    EditFormType4
   },
+  mixins: [
+    overview
+  ],
   data() {
     return {
       editIndex: -1,
@@ -57,58 +65,8 @@ export default {
       }
     }
   },
-  async created() {
-    this.$options.pageId = window.atob(this.$route.query.id)
-    const json = localStorage.getItem(this.$options.pageId)
-    const page = JSON.parse(json) || {
-      pageData: {},
-      comps: []
-    }
-
-    const pageData = page.pageData
-
-    // 获取各数据项的值
-    for (const key in pageData) {
-      const dataConfig = pageData[key]
-      if (dataConfig.createdMethod === 'created') {
-        if (dataConfig.url) {
-          const res = await this.$http.post(dataConfig.url)
-          dataConfig.data = res.data
-        }
-      }
-    }
-
-    // 为组件们赋值
-    const comps = page.comps
-    comps.forEach(item => {
-      if (item.dataSourceKey) {
-        item.data[item.dataKey] = pageData[item.dataSourceKey].data
-      }
-    })
-    console.log('this.pageData---', pageData)
-    console.log('this.comps---', comps)
-
-    this.page = page
-  },
   methods: {
-    onActionClick({ dataSource, action }) {
-      console.log('onActionClick---', dataSource, action)
-      if (action.operateType === 'push') {
-        this.$router.push({
-          path: '/setting/edit',
-          query: {
-            id: window.btoa(action.url)
-          }
-        })
-      } else {
-        const req = {}
-        action.params.forEach(item => {
-          req[item] = dataSource[item]
-        })
-        this.$http.post(action.url, req).then(res => {})
-      }
-    },
-    updateData(pageData) {
+    savePageData(pageData) {
       this.page.pageData = pageData
     },
     editPageDataSource() {
@@ -122,16 +80,20 @@ export default {
         this.$refs.editConfig.show(config, key, index)
       } else if (config.type === 3) {
         this.$refs.editOperate.show(config)
+      } else if (config.type === 4) {
+        this.$refs.editForm.show(config)
       }
     },
     saveConfig({ config, index, key }) {},
     saveProperty() {},
+    saveOperate() {},
+    saveForm() {},
     addComponent(index) {
       console.log('addComponent---', index)
       this.editIndex = index
       this.$refs.chooseDrawer.show()
     },
-    savePageData() {
+    savePage() {
       localStorage.setItem(this.$options.pageId, JSON.stringify(this.page))
       this.$message.success('保存网页成功')
     },

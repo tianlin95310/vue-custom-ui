@@ -5,6 +5,7 @@ module.exports = [
     response: () => {
       return {
         code: 20000,
+        msg: '请求成功',
         data: [
           { key: 'PC', pv: 1024, forward: 1231, collect: 445, share: 12412, thumbs: 78 },
           { key: 'mobile', pv: 1024, forward: 4, collect: 55, share: 67, thumbs: 214324 },

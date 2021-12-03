@@ -16,7 +16,7 @@
 
 <script>
 export default {
-  name: 'EditConfig',
+  name: 'EditCssConfig2',
   data() {
     return {
       showDrawer: false,
@@ -34,8 +34,7 @@ export default {
           this.config.config[item.key] = item.value
         })
       },
-      deep: true,
-      immediate: true
+      deep: true
     }
   },
   methods: {

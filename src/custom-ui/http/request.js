@@ -25,7 +25,7 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    console.log(error) // for debug
+    console.log('interceptors request error---', error) // for debug
     return Promise.reject(error)
   }
 )
@@ -65,19 +65,23 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return res
     } else {
       return res
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    console.log('interceptors response error---', error) // for debug
     Message({
       message: error.message,
       type: 'error',
       duration: 5 * 1000
     })
-    return Promise.reject(error)
+    return {
+      code: 20001,
+      data: null
+    }
+    // return Promise.reject(error)
   }
 )
 
