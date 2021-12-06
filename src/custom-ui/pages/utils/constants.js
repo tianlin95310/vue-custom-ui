@@ -83,3 +83,14 @@ export const formItems = [
   }
 ]
 
+export const optionFroms = [
+  {
+    label: '本地常量',
+    value: 'const'
+  },
+  {
+    label: '接口获取',
+    value: 'http'
+  }
+]
+

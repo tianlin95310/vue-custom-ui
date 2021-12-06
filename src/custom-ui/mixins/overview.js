@@ -37,10 +37,34 @@ export default {
       if (item.dataSourceKey) {
         item.data[item.dataKey] = pageData[item.dataSourceKey].data
       }
+      if (item.configs) {
+        for (const key in item.configs) {
+          const config = item.configs[key]
+          // 页面表单
+          if (config.type === 4) {
+            for (const key in config.items) {
+              pageData[key] = {
+                disabled: true,
+                key: key,
+                dataType: 'String',
+                dataSource: 'form',
+                createdMethod: 'mounted',
+                url: ''
+              }
+            }
+            for (const formKey in config.items) {
+              const formItems = config.items[formKey]
+              // 为下拉组件赋值
+              if (formItems.component === 'el-select' && formItems.optionKey) {
+                formItems.options = pageData[formItems.optionKey].data
+              }
+            }
+          }
+        }
+      }
     })
     console.log('this.pageData---', pageData)
     console.log('this.comps---', comps)
-
     this.page = page
   },
   methods: {

@@ -7,41 +7,52 @@
     direction="ttb"
   >
     <div class="property-s">
-      <div v-for="(group, index) in config.items" :key="index" class="property-group">
-        <el-tag v-if="group.name">{{ group.name }}</el-tag>
-        <div class="property-item">
-          <div><el-tag closable @close="onItemClose(index)">{{ group.title }}</el-tag></div>
-          <div><el-input v-model="group.prop" class="input-item-width" size="mini" placeholder="请输入key值" /></div>
-          <div>
-            <el-select v-model="group.type" placeholder="请选择" size="mini" class="input-item-width">
-              <el-option v-for="(item, oindex) in properTypes" :key="oindex" :label="item" :value="item" />
-            </el-select>
+      <div style="margin: 8px 0px">
+        <el-input
+          v-if="inputVisible"
+          ref="addInput"
+          v-model="inputValue"
+          class="input-item-width"
+          size="mini"
+          placeholder="请输入标题"
+          @keyup.enter.native="handleInputConfirm"
+          @blur="handleInputConfirm"
+        />
+        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加列</el-button>
+      </div>
+      <draggable :set-data="setData" :list="config.items">
+        <div v-for="(group, index) in config.items" :key="index" class="property-group">
+          <el-tag v-if="group.name">{{ group.name }}</el-tag>
+          <div class="property-item">
+            <div><el-tag closable @close="onItemClose(index)">{{ group.title }}</el-tag></div>
+            <div><el-input v-model="group.prop" class="input-item-width" size="mini" placeholder="请输入key值" /></div>
+            <div>
+              <el-select v-model="group.type" placeholder="请选择" size="mini" class="input-item-width">
+                <el-option v-for="(item, oindex) in properTypes" :key="oindex" :label="item" :value="item" />
+              </el-select>
+            </div>
           </div>
         </div>
-      </div>
-      <el-input
-        v-if="inputVisible"
-        ref="addInput"
-        v-model="inputValue"
-        class="input-item-width"
-        size="mini"
-        placeholder="请输入标题"
-        @keyup.enter.native="handleInputConfirm"
-        @blur="handleInputConfirm"
-      />
-      <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加列</el-button>
+      </draggable>
+
     </div>
   </el-drawer>
 </template>
 
 <script>
 import { properTypes } from '@/custom-ui/pages/utils/constants'
+import draggable from 'vuedraggable'
 export default {
   name: 'EditProperty',
+  components: {
+    draggable
+  },
   data() {
     return {
       showDrawer: false,
-      config: {},
+      config: {
+        items: []
+      },
       inputVisible: false,
       inputValue: '',
       properTypes: properTypes
@@ -51,6 +62,9 @@ export default {
 
   },
   methods: {
+    setData(dataTransfer) {
+      dataTransfer.setData('Text', '')
+    },
     showInput() {
       this.inputVisible = true
       this.inputValue = ''
@@ -93,6 +107,7 @@ export default {
   .property-group {
     display: inline-block;
     vertical-align: top;
+    cursor: pointer;
 
     .property-item {
       padding: 5px;

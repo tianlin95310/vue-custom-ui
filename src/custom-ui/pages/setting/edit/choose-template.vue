@@ -132,35 +132,7 @@ export default {
                 formEditKeys: {
                   title: '表单编辑',
                   type: 4,
-                  rules: {},
                   items: {
-                    username: {
-                      component: 'el-input',
-                      placeHolder: '请输入用户名',
-                      value: ''
-                    },
-                    password: {
-                      component: 'el-input',
-                      placeHolder: '请输入用密码',
-                      value: ''
-                    },
-                    verification: {
-                      component: 'el-select',
-                      placeHolder: '请选择类型',
-                      value: '',
-                      options: [
-                        {
-                          component: 'el-option',
-                          label: '外部用户',
-                          value: 'outer'
-                        },
-                        {
-                          component: 'el-option',
-                          label: '内部用户',
-                          value: 'inner'
-                        }
-                      ]
-                    }
                   }
                 }
               }

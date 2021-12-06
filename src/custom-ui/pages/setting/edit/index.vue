@@ -17,7 +17,7 @@
           {{ config.title }}
         </el-button>
       </div>
-      <component :is="comp.component" :data="comp.data" :configs="comp.configs" @onActionClick="onActionClick" />
+      <component :is="comp.component" :data="comp.data" :configs="comp.configs" @onActionClick="onActionClick" @change="onChange" />
       <div class="add-component"><el-button @click="addComponent(index + 1)">添加</el-button></div>
     </div>
     <choose-template ref="chooseDrawer" @choose="onTemplateSelect" />
@@ -42,6 +42,7 @@ import EditCssConfig2 from './components/edit-css-config2'
 import EditOperate from './components/edit-operate'
 import overview from '@/custom-ui/mixins/overview'
 import EditFormType4 from './components/edit-form-type4'
+
 export default {
   name: 'Edit',
   pageId: '',
@@ -66,6 +67,20 @@ export default {
     }
   },
   methods: {
+    onChange({ datas, from }) {
+      if (from === 'CommonForm') {
+        for (const key in datas) {
+          this.page.pageData[key] = {
+            disabled: true,
+            key: key,
+            dataType: 'String',
+            dataSource: 'form',
+            createdMethod: 'mounted',
+            url: datas[key]
+          }
+        }
+      }
+    },
     savePageData(pageData) {
       this.page.pageData = pageData
     },
@@ -81,20 +96,53 @@ export default {
       } else if (config.type === 3) {
         this.$refs.editOperate.show(config)
       } else if (config.type === 4) {
-        this.$refs.editForm.show(config)
+        this.$refs.editForm.show(config, key, index)
       }
     },
     saveConfig({ config, index, key }) {},
     saveProperty() {},
     saveOperate() {},
-    saveForm() {},
+    saveForm({ config, key, index }) {},
     addComponent(index) {
       console.log('addComponent---', index)
       this.editIndex = index
       this.$refs.chooseDrawer.show()
     },
     savePage() {
-      localStorage.setItem(this.$options.pageId, JSON.stringify(this.page))
+      const data = { ...this.page }
+      // 只保留内部外部接口的配置
+      const actPageData = {}
+      for (const key in data.pageData) {
+        const pageDataItem = data.pageData[key]
+        if (pageDataItem.dataSource === 'InnerHttp' || pageDataItem.dataSource === 'OuterHttp') {
+          pageDataItem.data = {}
+          actPageData[key] = pageDataItem
+        }
+      }
+      data.pageData = actPageData
+
+      data.comps.forEach(item => {
+        if (item.dataSourceKey) {
+          // 取接口数据的不保存
+          item.data[item.dataKey] = {}
+        }
+        if (item.configs) {
+          for (const key in item.configs) {
+            const config = item.configs[key]
+            // 页面表单
+            if (config.type === 4) {
+              for (const formKey in config.items) {
+                const formItems = config.items[formKey]
+                // 接口赋值不保存
+                if (formItems.component === 'el-select' && formItems.optionKey) {
+                  formItems.options = []
+                }
+              }
+            }
+          }
+        }
+      })
+      localStorage.setItem(this.$options.pageId, JSON.stringify(data))
       this.$message.success('保存网页成功')
     },
     deleteComponent(index) {

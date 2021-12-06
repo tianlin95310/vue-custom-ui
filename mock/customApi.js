@@ -14,6 +14,26 @@ module.exports = [
         ]
       }
     }
+  },
+  {
+    url: '/vue-custom-ui/business/list',
+    type: 'post',
+    response: () => {
+      return {
+        code: 20000,
+        msg: '请求成功',
+        data: [
+          {
+            label: '站内视频',
+            value: 'inner'
+          },
+          {
+            label: '站外视频',
+            value: 'outer'
+          }
+        ]
+      }
+    }
   }
 ]
 
