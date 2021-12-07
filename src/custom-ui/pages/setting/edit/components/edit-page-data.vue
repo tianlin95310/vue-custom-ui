@@ -4,7 +4,7 @@
     :visible.sync="showDrawer"
     :with-header="false"
     :before-close="handleClose"
-    size="50%"
+    size="70%"
   >
     <div class="edit-page-data">
       <div>
@@ -73,6 +73,31 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="参数">
+          <template slot-scope="scope">
+            <el-tag
+              v-for="tag in scope.row.params"
+              :key="tag"
+              closable
+              style="margin-right: 8px"
+              @close="handleParamClose(scope.row, tag)"
+            >
+              {{ tag }}
+            </el-tag>
+            <el-input
+              v-if="scope.row.inputVisible"
+              ref="addParam"
+              v-model="scope.row.inputValue"
+              style="width: 120px"
+              size="mini"
+              placeholder="请输入标题"
+              @keyup.enter.native="handleAddConfirm(scope.row)"
+              @blur="handleAddConfirm(scope.row)"
+            />
+            <el-button v-else class="button-new-tag" size="small" @click="showAddInput(scope.row)">+ 新参数</el-button>
+          </template>
+        </el-table-column>
+
         <el-table-column label="操作" width="80">
           <template slot-scope="scope">
             <el-button :disabled="scope.row.disabled" type="text" size="small" @click="deleteDataItem(scope.row)">删除</el-button>
@@ -104,19 +129,31 @@ export default {
       handler(newV, oldV) {
         this.pageData = {}
         this.datas.forEach(item => {
-          this.pageData[item.key] = {
-            dataType: item.dataType,
-            dataSource: item.dataSource,
-            url: item.url,
-            createdMethod: item.createdMethod,
-            disabled: item.disabled
-          }
+          this.pageData[item.key] = { ...item }
         })
       },
       deep: true
     }
   },
   methods: {
+    handleParamClose(row, tag) {
+      row.params.splice(row.params.indexOf(tag), 1)
+    },
+    handleAddConfirm(row) {
+      if (!row.inputValue) {
+        row.inputVisible = false
+        return
+      }
+      row.params.push(row.inputValue)
+      row.inputVisible = false
+    },
+    showAddInput(row) {
+      row.inputValue = ''
+      row.inputVisible = true
+      this.$nextTick(() => {
+        this.$refs.addParam.focus()
+      })
+    },
     handleClose() {
       this.$emit('save', this.pageData)
       this.showDrawer = false
@@ -136,7 +173,10 @@ export default {
         dataSource: dataSources[0].value,
         url: '',
         createdMethod: createdMethods[0].value,
-        disabled: false
+        disabled: false,
+        params: [],
+        inputVisible: false,
+        inputValue: ''
       })
       this.inputVisible = false
     },
@@ -157,7 +197,10 @@ export default {
           dataType: pageData[key].dataType,
           dataSource: pageData[key].dataSource,
           createdMethod: pageData[key].createdMethod,
-          disabled: pageData[key].disabled
+          disabled: pageData[key].disabled,
+          params: pageData[key].params ?? [],
+          inputVisible: false,
+          inputValue: ''
         })
       }
       this.datas = datas

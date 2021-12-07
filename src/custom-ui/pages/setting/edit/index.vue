@@ -21,38 +21,36 @@
       <div class="add-component"><el-button @click="addComponent(index + 1)">添加</el-button></div>
     </div>
     <choose-template ref="chooseDrawer" @choose="onTemplateSelect" />
-
-    <edit-property ref="editProperty" @save="saveProperty" />
-
-    <edit-css-config2 ref="editConfig" @save="saveConfig" />
-
     <edit-page-data ref="editPageData" @save="savePageData" />
-
-    <edit-operate ref="editOperate" @save="saveOperate" />
-
+    <edit-property1 ref="editProperty" @save="saveProperty" />
+    <edit-css-config2 ref="editConfig" @save="saveConfig" />
+    <edit-operate3 ref="editOperate" @save="saveOperate" />
     <edit-form-type4 ref="editForm" @save="saveForm" />
+    <edit-buttons5 ref="editButtons" />
   </div>
 </template>
 
 <script>
 import ChooseTemplate from './choose-template'
 import EditPageData from './components/edit-page-data'
-import EditProperty from './components/edit-property'
+import EditProperty1 from './components/edit-property1'
 import EditCssConfig2 from './components/edit-css-config2'
-import EditOperate from './components/edit-operate'
+import EditOperate3 from './components/edit-operate3'
 import overview from '@/custom-ui/mixins/overview'
 import EditFormType4 from './components/edit-form-type4'
+import EditButtons5 from './components/edit-buttons5'
 
 export default {
   name: 'Edit',
   pageId: '',
   components: {
-    EditCssConfig2,
     ChooseTemplate,
     EditPageData,
-    EditProperty,
-    EditOperate,
-    EditFormType4
+    EditProperty1,
+    EditCssConfig2,
+    EditOperate3,
+    EditFormType4,
+    EditButtons5
   },
   mixins: [
     overview
@@ -67,20 +65,6 @@ export default {
     }
   },
   methods: {
-    onChange({ datas, from }) {
-      if (from === 'CommonForm') {
-        for (const key in datas) {
-          this.page.pageData[key] = {
-            disabled: true,
-            key: key,
-            dataType: 'String',
-            dataSource: 'form',
-            createdMethod: 'mounted',
-            url: datas[key]
-          }
-        }
-      }
-    },
     savePageData(pageData) {
       this.page.pageData = pageData
     },
@@ -97,6 +81,8 @@ export default {
         this.$refs.editOperate.show(config)
       } else if (config.type === 4) {
         this.$refs.editForm.show(config, key, index)
+      } else if (config.type === 5) {
+        this.$refs.editButtons.show(config)
       }
     },
     saveConfig({ config, index, key }) {},
@@ -124,7 +110,7 @@ export default {
       data.comps.forEach(item => {
         if (item.dataSourceKey) {
           // 取接口数据的不保存
-          item.data[item.dataKey] = {}
+          item.data = []
         }
         if (item.configs) {
           for (const key in item.configs) {

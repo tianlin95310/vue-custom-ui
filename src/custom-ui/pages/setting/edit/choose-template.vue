@@ -34,17 +34,14 @@ export default {
               id: '0x20001',
               component: 'CommonTable',
               name: 'Element风格表格',
-              dataKey: 'list',
               dataSourceKey: 'tableData',
-              data: {
-                list: [
-                  {
-                    col1: '100',
-                    col2: '200',
-                    more: '...'
-                  }
-                ]
-              },
+              data: [
+                {
+                  col1: '100',
+                  col2: '200',
+                  more: '...'
+                }
+              ],
               configs: {
                 dataColKeys: {
                   title: '列属性设置',
@@ -75,7 +72,8 @@ export default {
                     {
                       title: '删除',
                       url: '',
-                      params: []
+                      params: [],
+                      pageParams: []
                     }
                   ]
                 },
@@ -134,6 +132,18 @@ export default {
                   type: 4,
                   items: {
                   }
+                },
+                confirmButton: {
+                  title: '编辑按钮',
+                  type: 5,
+                  buttons: [
+                    {
+                      title: '查询',
+                      url: '',
+                      operateType: '',
+                      params: []
+                    }
+                  ]
                 }
               }
             }

@@ -7,6 +7,7 @@
       :data="comp.data"
       :configs="comp.configs"
       @onActionClick="onActionClick"
+      @change="onChange"
     />
   </div>
 </template>

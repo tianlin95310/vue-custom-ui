@@ -37,6 +37,12 @@
               <el-input v-model="scope.row.url" size="mini" :placeholder="getPlaceHolder(scope.row)" />
             </template>
           </el-table-column>
+
+          <el-table-column label="刷新页面数据源" width="120">
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.updatePageKey" size="mini" placeholder="页面数据源" />
+            </template>
+          </el-table-column>
           <el-table-column label="参数">
             <template slot-scope="scope">
               <el-tag
@@ -94,7 +100,8 @@ export default {
         title: '',
         operateType: operateTypes[0].value,
         url: '',
-        params: []
+        params: [],
+        updatePageKey: ''
       })
     },
     getPlaceHolder(row) {
@@ -125,13 +132,18 @@ export default {
         this.$set(this.config.actions, this.config.actions.indexOf(row), row)
         return
       }
-      row.params.push(this.inputValue)
+      row.params.push(row.inputValue)
       row.inputVisible = false
       this.$set(this.config.actions, this.config.actions.indexOf(row), row)
     },
     show(config) {
       this.showDrawer = true
       this.config = config
+
+      this.config.actions.forEach(item => {
+        item.inputVisible = false
+        item.inputValue = ''
+      })
     }
   }
 }

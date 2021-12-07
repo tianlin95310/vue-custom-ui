@@ -1,7 +1,7 @@
 <template>
   <el-table
     class="common-table"
-    :data="tableData"
+    :data="data"
     :span-method="arraySpanMethod"
     border
   >
@@ -28,9 +28,9 @@ export default {
   name: 'CommonTable',
   props: {
     data: {
-      type: Object,
+      type: Array,
       default() {
-        return {}
+        return []
       }
     },
     configs: {
@@ -42,12 +42,6 @@ export default {
   },
   data() {
     return {
-      spanArray: [],
-      spanKey: {
-        type: String,
-        default: ''
-      },
-      tableData: [],
       dataKeys: [],
       operateKeys: {
         show: false,
@@ -56,46 +50,12 @@ export default {
     }
   },
   created() {
-    console.log('this.configs', this.configs)
-    this.spanKey = this.data.spanKey
-    this.tableData = this.data.list
     this.dataKeys = this.configs.dataColKeys.items
     this.operateKeys = this.configs.operateKeys
     console.log('table config---', this.configs)
-    if (this.spanKey) {
-      this.spanArray = this.getSpanArray()
-    }
   },
   methods: {
-    getSpanArray() {
-      const array = []
-      let pos = 0
-      for (let i = 0; i < this.tableData.length; i++) {
-        const item = this.tableData[i]
-        if (i === 0) {
-          array.push(1)
-        } else {
-          const preIndex = i - 1
-          const preRow = this.tableData[preIndex]
-          if (item[this.spanKey] === preRow[this.spanKey]) {
-            array[pos] += 1
-            array.push(0)
-          } else {
-            array.push(1)
-            pos = i
-          }
-        }
-      }
-      return array
-    },
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
-      if (this.spanKey) {
-        if (columnIndex === 0) {
-          const rowSpan = this.spanArray[rowIndex]
-          const colSpan = rowSpan > 0 ? 1 : 0
-          return [rowSpan, colSpan]
-        }
-      }
     },
     onActionClick(row, bt) {
       this.$emit('onActionClick', { dataSource: row, action: bt })

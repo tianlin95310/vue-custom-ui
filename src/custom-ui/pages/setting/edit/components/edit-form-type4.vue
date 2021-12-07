@@ -44,7 +44,7 @@
 
           <el-table-column label="选项值来源" width="120">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.optionFrom" size="mini" placeholder="请选择">
+              <el-select v-if="scope.row.component === 'el-select'" v-model="scope.row.optionFrom" size="mini" placeholder="请选择">
                 <el-option
                   v-for="item in optionFroms"
                   :key="item.value"
@@ -179,6 +179,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .edit-form {
   padding: 16px 10px;
 
@@ -193,9 +194,11 @@ export default {
       .icon {
         top: 0;
         left: 0;
+        opacity: 1;
         color: darkred;
         display: inline-block;
         cursor: pointer;
+        font-size: 18px;
       }
     }
     .option-item {
@@ -204,10 +207,16 @@ export default {
       position: relative;
       padding-left: 8px;
       padding-top: 8px;
+      div {
+        opacity: 1;
+        transition: opacity 0.3s ease-in;
+      }
       .icon {
+        opacity: 0;
+        transition: font-size 0.2s ease-in;
         position: absolute;
-        display: none;
-        font-size: 18px;
+        //display: none;
+        font-size: 0px;
       }
       input {
         width: 70px;

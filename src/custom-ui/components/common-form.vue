@@ -19,7 +19,16 @@
     <el-row type="flex" justify="center">
       <el-form-item class="search-area-btn">
         <el-button round size="small" @click="resetData('formData')">重置</el-button>
-        <el-button type="primary" size="small" round @click="handleSearch('formData')">查询</el-button>
+        <el-button
+          v-for="(button, index) in configs.confirmButton.buttons"
+          :key="index"
+          type="primary"
+          size="small"
+          round
+          @click="handleSearch('formData', button)"
+        >
+          {{ button.title }}
+        </el-button>
       </el-form-item>
     </el-row>
   </el-form>
@@ -64,7 +73,7 @@ export default {
     datas: {
       handler() {
         console.log('this.datas', this.datas)
-        this.$emit('change', { datas: this.datas, from: this.$options.name })
+        this.$emit('change', { datas: this.datas, from: this.$options.name, key: 'form' })
       },
       deep: true
     }
@@ -79,11 +88,19 @@ export default {
         return 'el-option'
       }
     },
-    handleSearch(formName) {
+    handleSearch(formName, button) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // do action
-          this.$message.success('搜索')
+          const params = {}
+          button.params.forEach(item => {
+            params[item] = this.datas[item]
+          })
+          console.log(params)
+          if (button.operateType === 'http') {
+            this.$http.post(button.url, params).then(res => {
+              this.$emit('change', { datas: res.data, from: this.$options.name, key: 'tableData' })
+            })
+          }
         } else {
           return false
         }
