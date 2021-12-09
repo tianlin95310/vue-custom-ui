@@ -91,15 +91,10 @@ export default {
     handleSearch(formName, button) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          const params = {}
-          button.params.forEach(item => {
-            params[item] = this.datas[item]
-          })
-          console.log(params)
           if (button.operateType === 'http') {
-            this.$http.post(button.url, params).then(res => {
-              this.$emit('change', { datas: res.data, from: this.$options.name, key: 'tableData' })
-            })
+            this.$emit('onActionClick', { dataSource: this.datas, action: button })
+          } else if (button.operateType === 'refreshKey') {
+            this.$emit('onActionClick', { dataSource: null, action: button })
           }
         } else {
           return false

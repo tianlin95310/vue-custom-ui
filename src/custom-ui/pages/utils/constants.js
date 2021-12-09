@@ -54,13 +54,15 @@ export const createdMethods = [
 export const operateTypes = [
   {
     label: '打开界面',
-    value: 'push',
-    placeHolder: '请输入界面的路由'
+    value: 'push'
   },
   {
     label: '调用接口',
-    value: 'http',
-    placeHolder: '请输入调用的接口'
+    value: 'http'
+  },
+  {
+    label: '刷新数据源',
+    value: 'refreshKey'
   }
 ]
 

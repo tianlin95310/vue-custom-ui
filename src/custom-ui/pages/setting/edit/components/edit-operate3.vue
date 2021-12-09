@@ -32,19 +32,18 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="url" width="240">
+          <el-table-column label="刷新数据源?" width="120">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.url" size="mini" :placeholder="getPlaceHolder(scope.row)" />
+              <el-input v-model="scope.row.updatePageKey" size="mini" placeholder="数据源key" />
             </template>
           </el-table-column>
-
-          <el-table-column label="刷新页面数据源" width="120">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.updatePageKey" size="mini" placeholder="页面数据源" />
+          <el-table-column label="url" width="240">
+            <template v-if="scope.row.operateType === operateTypes[0].value || scope.row.operateType === operateTypes[1].value" slot-scope="scope">
+              <el-input v-model="scope.row.url" size="mini" placeholder="页面路径或者接口" />
             </template>
           </el-table-column>
           <el-table-column label="参数">
-            <template slot-scope="scope">
+            <template v-if="scope.row.operateType === operateTypes[0].value || scope.row.operateType === operateTypes[1].value" slot-scope="scope">
               <el-tag
                 v-for="tag in scope.row.params"
                 :key="tag"
@@ -103,14 +102,6 @@ export default {
         params: [],
         updatePageKey: ''
       })
-    },
-    getPlaceHolder(row) {
-      const find = operateTypes.find(item => {
-        return item.value === row.operateType
-      })
-      if (find) {
-        return find.placeHolder
-      }
     },
     deleteItem(row) {
       this.config.actions.splice(this.config.actions.indexOf(row), 1)

@@ -6,7 +6,8 @@ const data = [
   { key: 'ios', pv: 1024, forward: 23, collect: 123, share: 456, thumbs: 1233 },
   { key: 'android', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
   { key: 'Mac', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
-  { key: 'Linux', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 }
+  { key: 'Linux', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
+  { key: 'Unix', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 }
 ]
 
 module.exports = [
@@ -18,6 +19,10 @@ module.exports = [
       // username = username ?? ''
       data.forEach(item => {
         item.pv = Mock.mock('@integer(300, 5000)')
+        item.forward = Mock.mock('@integer(300, 5000)')
+        item.collect = Mock.mock('@integer(300, 5000)')
+        item.share = Mock.mock('@integer(300, 5000)')
+        item.thumbs = Mock.mock('@integer(300, 5000)')
       })
       return {
         code: 20000,

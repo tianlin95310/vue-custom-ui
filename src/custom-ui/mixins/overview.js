@@ -127,18 +127,6 @@ export default {
               data: datas[key]
             }
           }
-        } else {
-          const pageKey = this.page.pageData[key]
-          pageKey.data = datas
-          const compIndex = pageKey.compIndex
-          if (compIndex) {
-            const item = this.page.comps[compIndex]
-            if (item.dataSourceKey) {
-              item.data = pageKey.data
-            }
-            this.$set(this.page.comps, compIndex, item)
-            // this.$forceUpdate()
-          }
         }
       }
     },
@@ -151,7 +139,7 @@ export default {
             id: window.btoa(action.url)
           }
         })
-      } else {
+      } else if (action.operateType === 'http') {
         const req = {}
         action.params.forEach(item => {
           req[item] = dataSource[item]
@@ -165,6 +153,10 @@ export default {
         }).catch(error => {
           console.log('error---', error)
         })
+      } else if (action.operateType === 'refreshKey') {
+        if (action.updatePageKey) {
+          this.updatePageData(action.updatePageKey)
+        }
       }
     }
   }

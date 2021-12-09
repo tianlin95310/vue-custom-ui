@@ -95,7 +95,7 @@ export default {
       this.$refs.chooseDrawer.show()
     },
     savePage() {
-      const data = { ...this.page }
+      const data = JSON.parse(JSON.stringify(this.page))
       // 只保留内部外部接口的配置
       const actPageData = {}
       for (const key in data.pageData) {
