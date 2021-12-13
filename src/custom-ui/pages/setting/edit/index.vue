@@ -97,16 +97,15 @@ export default {
     savePage() {
       const data = JSON.parse(JSON.stringify(this.page))
       // 只保留内部外部接口的配置
-      const actPageData = {}
+      const pageData = {}
       for (const key in data.pageData) {
         const pageDataItem = data.pageData[key]
-        if (pageDataItem.dataSource === 'InnerHttp' || pageDataItem.dataSource === 'OuterHttp') {
+        if (pageDataItem.dataSource === 'InnerHttp') {
           pageDataItem.data = {}
-          actPageData[key] = pageDataItem
+          pageData[key] = pageDataItem
         }
       }
-      data.pageData = actPageData
-
+      data.pageData = pageData
       data.comps.forEach(item => {
         if (item.dataSourceKey) {
           // 取接口数据的不保存
@@ -115,11 +114,11 @@ export default {
         if (item.configs) {
           for (const key in item.configs) {
             const config = item.configs[key]
-            // 页面表单
+            // 页面组件清理网络数据来减少数据量
             if (config.type === 4) {
               for (const formKey in config.items) {
                 const formItems = config.items[formKey]
-                // 接口赋值不保存
+                // 来自于接口调用的选项赋值不保存
                 if (formItems.component === 'el-select' && formItems.optionKey) {
                   formItems.options = []
                 }

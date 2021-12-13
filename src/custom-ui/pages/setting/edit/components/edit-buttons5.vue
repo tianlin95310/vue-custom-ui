@@ -95,6 +95,7 @@ export default {
       this.config.actions.push({
         title: '',
         operateType: operateTypes[0].value,
+        updatePageKey: '',
         url: '',
         params: []
       })

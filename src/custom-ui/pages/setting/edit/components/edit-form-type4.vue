@@ -55,7 +55,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="选项" width="180">
+          <el-table-column label="选项或数据源key" width="180">
             <template slot-scope="scope">
               <template v-if="scope.row.component === 'el-select'">
                 <div v-if="scope.row.optionFrom === optionFroms[0].value" class="options">
@@ -213,7 +213,10 @@ export default {
       }
       .icon {
         opacity: 0;
-        transition: font-size 0.2s ease-in;
+        color: grey;
+        top: 0;
+        left: 0;
+        transition: all 0.2s ease-in;
         position: absolute;
         //display: none;
         font-size: 0px;

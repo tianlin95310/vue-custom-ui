@@ -1,4 +1,4 @@
-import { createdMethods, dataSources } from '@/custom-ui/pages/utils/constants'
+import { createdMethods } from '@/custom-ui/pages/utils/constants'
 
 export default {
   /**
@@ -21,7 +21,7 @@ export default {
       pageData[key] = {
         disabled: true,
         dataType: 'String',
-        dataSource: dataSources[3].value,
+        dataSource: 'query',
         url: window.atob(this.$route.query[key]),
         data: window.atob(this.$route.query[key]),
         createdMethod: createdMethods[0].value,

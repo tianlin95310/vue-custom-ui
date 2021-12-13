@@ -139,8 +139,9 @@ export default {
                   buttons: [
                     {
                       title: '查询',
-                      url: '',
                       operateType: '',
+                      updatePageKey: '',
+                      url: '',
                       params: []
                     }
                   ]

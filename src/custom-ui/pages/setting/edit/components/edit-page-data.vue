@@ -23,7 +23,7 @@
       </div>
 
       <el-table :data="datas">
-        <el-table-column prop="key" label="key" width="160">
+        <el-table-column prop="key" label="key" width="140">
           <template slot-scope="scope">
             <el-input v-model="scope.row.key" :disabled="scope.row.disabled" size="mini" placeholder="请输入数据的key" />
           </template>
@@ -54,7 +54,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="url或者值">
+        <el-table-column label="url或者值" width="240">
           <template slot-scope="scope">
             <el-input v-model="scope.row.url" :disabled="scope.row.disabled" size="mini" />
           </template>
@@ -74,7 +74,7 @@
         </el-table-column>
 
         <el-table-column label="参数">
-          <template slot-scope="scope">
+          <template v-if="scope.row.dataSource === dataSources[0].value" slot-scope="scope">
             <el-tag
               v-for="tag in scope.row.params"
               :key="tag"

@@ -27,10 +27,6 @@ export const dataSources = [
     value: 'InnerHttp'
   },
   {
-    label: '外部接口',
-    value: 'OuterHttp'
-  },
-  {
     label: '页面表单',
     value: 'form'
   },
