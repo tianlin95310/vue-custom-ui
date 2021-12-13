@@ -135,7 +135,7 @@ export default {
     },
     onTemplateSelect(template) {
       if (this.editIndex !== -1) {
-        this.page.comps.splice(this.editIndex, 0, template)
+        this.page.comps.splice(this.editIndex, 0, JSON.parse(JSON.stringify(template)))
       }
     }
   }

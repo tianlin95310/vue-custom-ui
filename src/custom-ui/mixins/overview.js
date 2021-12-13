@@ -69,7 +69,10 @@ export default {
       // 为绑定了数据源的组件进行赋值，并再数据源中记录组件的索引，用于刷新
       if (item.dataSourceKey) {
         item.data = pageData[item.dataSourceKey].data
-        pageData[item.dataSourceKey].compIndex = index
+        if (!pageData[item.dataSourceKey].compIndexs) {
+          pageData[item.dataSourceKey].compIndexs = []
+        }
+        pageData[item.dataSourceKey].compIndexs.push(index)
       }
       for (const key in item.configs) {
         const config = item.configs[key]
@@ -100,17 +103,20 @@ export default {
             req[item] = this.page.pageData[item].data ?? ''
           })
           const res = await this.$http.post(dataConfig.url, req)
+          // eslint-disable-next-line require-atomic-updates
           dataConfig.data = res.data
         }
       }
-      const compIndex = dataConfig.compIndex
-      if (compIndex) {
-        const item = this.page.comps[compIndex]
-        if (item.dataSourceKey) {
-          item.data = dataConfig.data
-        }
-        this.$set(this.page.comps, compIndex, item)
-        // this.$forceUpdate()
+      const compIndexs = dataConfig.compIndexs
+      console.log('compIndexs', compIndexs)
+      if (compIndexs) {
+        compIndexs.forEach(compIndex => {
+          const item = this.page.comps[compIndex]
+          if (item.dataSourceKey) {
+            item.data = dataConfig.data
+          }
+          this.$set(this.page.comps, compIndex, item)
+        })
       }
     },
     onChange({ datas, from, key }) {
