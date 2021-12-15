@@ -83,6 +83,16 @@ export default {
         this.$refs.editForm.show(config, key, index)
       } else if (config.type === 5) {
         this.$refs.editButtons.show(config)
+      } else if (config.type === 6) {
+        this.$prompt('请输入数据源的key值', '数据源设置', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputValue: comp.dataSourceKey,
+          inputPattern: /^\w{1,20}$/,
+          inputErrorMessage: '请输入a-z、A-Z、0-9，以及下划线，20字符以内'
+        }).then(({ value }) => {
+          comp.dataSourceKey = value
+        }).catch(() => {})
       }
     },
     saveConfig({ config, index, key }) {},
@@ -102,6 +112,9 @@ export default {
         const pageDataItem = data.pageData[key]
         if (pageDataItem.dataSource === 'InnerHttp') {
           pageDataItem.data = {}
+          pageDataItem.inputVisible = undefined
+          pageDataItem.inputValue = undefined
+          pageDataItem.compIndexs = []
           pageData[key] = pageDataItem
         }
       }

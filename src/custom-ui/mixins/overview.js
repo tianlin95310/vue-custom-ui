@@ -50,11 +50,13 @@ export default {
       }
     })
 
-    // 获取各页面数据源的值
+    // 获取数据源的值
     for (const key in pageData) {
       const dataConfig = pageData[key]
       if (dataConfig.createdMethod === 'created') {
         if (dataConfig.dataSource === 'InnerHttp') {
+          // 初始化索引
+          dataConfig.compIndexs = []
           const req = {}
           dataConfig.params.forEach(item => {
             req[item] = this.page.pageData[item] ?? ''
@@ -68,11 +70,11 @@ export default {
     comps.forEach((item, index) => {
       // 为绑定了数据源的组件进行赋值，并再数据源中记录组件的索引，用于刷新
       if (item.dataSourceKey) {
-        item.data = pageData[item.dataSourceKey].data
-        if (!pageData[item.dataSourceKey].compIndexs) {
-          pageData[item.dataSourceKey].compIndexs = []
+        const dataItem = pageData[item.dataSourceKey]
+        if (dataItem) {
+          item.data = dataItem.data
+          dataItem.compIndexs.push(index)
         }
-        pageData[item.dataSourceKey].compIndexs.push(index)
       }
       for (const key in item.configs) {
         const config = item.configs[key]
@@ -80,10 +82,14 @@ export default {
         if (config.type === 4) {
           // 为表单中绑定了数据原的组件进行赋值
           for (const formKey in config.items) {
-            const formItems = config.items[formKey]
+            const formItem = config.items[formKey]
             // 为下拉组件赋值
-            if (formItems.component === 'el-select' && formItems.optionKey) {
-              formItems.options = pageData[formItems.optionKey].data
+            if (formItem.component === 'el-select' && formItem.optionKey) {
+              const dataItem = pageData[formItem.optionKey]
+              if (dataItem) {
+                formItem.options = dataItem.data
+                dataItem.compIndexs.push(index)
+              }
             }
           }
         }
@@ -96,27 +102,25 @@ export default {
   methods: {
     async updatePageData(key) {
       const dataConfig = this.page.pageData[key]
-      if (dataConfig.createdMethod === 'created') {
-        if (dataConfig.dataSource === 'InnerHttp') {
-          const req = {}
-          dataConfig.params.forEach(item => {
-            req[item] = this.page.pageData[item].data ?? ''
-          })
-          const res = await this.$http.post(dataConfig.url, req)
-          // eslint-disable-next-line require-atomic-updates
-          dataConfig.data = res.data
-        }
-      }
-      const compIndexs = dataConfig.compIndexs
-      console.log('compIndexs', compIndexs)
-      if (compIndexs) {
-        compIndexs.forEach(compIndex => {
-          const item = this.page.comps[compIndex]
-          if (item.dataSourceKey) {
-            item.data = dataConfig.data
-          }
-          this.$set(this.page.comps, compIndex, item)
+      if (dataConfig.dataSource === 'InnerHttp') {
+        const req = {}
+        dataConfig.params.forEach(item => {
+          req[item] = this.page.pageData[item].data ?? ''
         })
+        const res = await this.$http.post(dataConfig.url, req)
+        // 更新数据源的值
+        // eslint-disable-next-line require-atomic-updates
+        dataConfig.data = res.data
+        // 刷新绑定了该数据的组件
+        if (dataConfig.compIndexs) {
+          dataConfig.compIndexs.forEach(compIndex => {
+            const item = this.page.comps[compIndex]
+            if (item.dataSourceKey) {
+              item.data = dataConfig.data
+              this.$set(this.page.comps, compIndex, item)
+            }
+          })
+        }
       }
     },
     onChange({ datas, from, key }) {

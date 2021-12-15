@@ -19,7 +19,7 @@
           @keyup.enter.native="handleInputConfirm"
           @blur="handleInputConfirm"
         />
-        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 添加数据项</el-button>
+        <el-button v-else size="small" @click="showInput">+ 添加数据项</el-button>
       </div>
 
       <el-table :data="datas">
@@ -94,7 +94,7 @@
               @keyup.enter.native="handleAddConfirm(scope.row)"
               @blur="handleAddConfirm(scope.row)"
             />
-            <el-button v-else class="button-new-tag" size="small" @click="showAddInput(scope.row)">+ 新参数</el-button>
+            <el-button v-else size="small" style="margin-top: 8px" @click="showAddInput(scope.row)">+ 新参数</el-button>
           </template>
         </el-table-column>
 

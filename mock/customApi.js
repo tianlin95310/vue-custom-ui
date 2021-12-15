@@ -1,14 +1,16 @@
 const Mock = require('mockjs')
 
 const data = [
-  { key: 'PC', pv: 1024, forward: 1231, collect: 445, share: 12412, thumbs: 78 },
-  { key: 'Mobile', pv: 1024, forward: 4, collect: 55, share: 67, thumbs: 214324 },
-  { key: 'Ios', pv: 1024, forward: 23, collect: 123, share: 456, thumbs: 1233 },
-  { key: 'Android', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
+  { key: 'Windows', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
   { key: 'Mac', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
   { key: 'Linux', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
   { key: 'Unix', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
-  { key: 'Win Phone', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 }
+  { key: 'PC', pv: 1024, forward: 1231, collect: 445, share: 12412, thumbs: 78 },
+  { key: 'Mobile', pv: 1024, forward: 4, collect: 55, share: 67, thumbs: 214324 },
+  { key: 'Android', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
+  { key: 'Ios', pv: 1024, forward: 23, collect: 123, share: 456, thumbs: 1233 },
+  { key: 'Win Phone', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 },
+  { key: 'Chrome', pv: 1024, forward: 11, collect: 555, share: 3434, thumbs: 7878 }
 ]
 
 module.exports = [

@@ -83,6 +83,10 @@ export default {
                   config: {
 
                   }
+                },
+                dataSourceEdit: {
+                  title: '数据源编辑',
+                  type: 6
                 }
               }
             },
