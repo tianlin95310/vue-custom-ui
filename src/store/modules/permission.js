@@ -29,57 +29,38 @@ function getRouterByRemote(menus) {
       path: menu.link,
       meta: {
         title: menu.name,
-        icon: menu.icon
+        icon: menu.icon,
+        noCache: menu.noCache !== false,
+        id: menu.id,
+        pid: menu.pid
       },
       name: menu.name,
-      hidden: menu.hidden
+      hidden: menu.hidden,
+      redirect: menu.redirect,
+      container: menu.container
     }
     if (menu.children && menu.children[0]) {
       router.children = getRouterByRemote(menu.children)
     }
     if (menu.menuType === 1) {
-      const Arouter = {
-        path: menu.link,
-        component: menu.container === 'custom' ? LayoutCustom : Layout,
-        name: menu.name,
-        meta: {
-          title: menu.name
-        }
-      }
       if (menu.children.length === 0) {
         // 表明是一个单个的页面
-        router.path = 'index'
-        Arouter.redirect = menu.link + '/index'
         let component = null
         try {
-          component = () => Promise.resolve(require('@/custom-ui/pages' + menu.link).default)
+          component = () => Promise.resolve(require('@/custom-ui/pages' + menu.target).default)
         } catch (error) {
           console.log('---getRouterByRemote---', error)
         }
         router.component = component
-        Arouter.alwaysShow = false
-        Arouter.meta = {}
-        Arouter.name = undefined
-        Arouter.children = []
-        Arouter.children.push(router)
-      } else if (menu.children.length === 1) {
-        // 目录，只有一个页面
-        if (!Arouter.alwaysShow) {
-          Arouter.alwaysShow = false
-        }
-        Arouter.children = router.children
       } else {
-        if (!Arouter.alwaysShow) {
-          Arouter.alwaysShow = true
-        }
-        Arouter.children = router.children
+        router.alwaysShow = true
       }
-      routers.push(Arouter)
+      routers.push(router)
     } else if (menu.menuType === 2) {
       // 这个是纯界面
       let component = null
       try {
-        component = () => Promise.resolve(require('@/custom-ui/pages' + menu.link).default)
+        component = () => Promise.resolve(require('@/custom-ui/pages' + menu.target).default)
       } catch (error) {
         console.log('---getRouterByRemote---', error)
       }
@@ -122,7 +103,35 @@ export function filterAsyncRoutes(routes, roles) {
 
   return res
 }
-
+function get2DRouters(menus) {
+  const routers = makeMenusTo2D(menus)
+  return routers.map(item => {
+    return {
+      component: item.container ? LayoutCustom : Layout,
+      path: item.path,
+      redirect: item.redirect,
+      children: [
+        item
+      ]
+    }
+  })
+}
+function makeMenusTo2D(routers) {
+  let ROUTERS = []
+  routers.forEach(item => {
+    if (item.children) {
+      ROUTERS.push({
+        component: item.component,
+        path: item.path,
+        redirect: item.redirect
+      })
+      ROUTERS = ROUTERS.concat(makeMenusTo2D(item.children))
+    } else {
+      ROUTERS.push(item)
+    }
+  })
+  return ROUTERS
+}
 const state = {
   routes: [],
   addRoutes: []
@@ -143,8 +152,13 @@ const actions = {
       // accessedRoutes = filterAsyncRoutes(asyncRoutes, menus)
       const accessedRoutes = getRouterByRemote(menus)
       console.log('---accessedRoutes---路由', accessedRoutes)
+      // 路由无法匹配走404
+      accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
+      // 多维路由二维处理
+      const tdRouters = get2DRouters(accessedRoutes)
+      console.log('---accessedRoutes---路由', accessedRoutes, tdRouters)
       commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+      resolve(tdRouters)
     })
   }
 }

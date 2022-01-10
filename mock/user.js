@@ -11,7 +11,7 @@ const menus = [
   {
     name: '首页',
     link: '/homes',
-    target: 'homes',
+    target: '/homes',
     icon: 'documentation',
     menuType: 1,
     children: []
@@ -19,14 +19,14 @@ const menus = [
   {
     name: '网页设置',
     link: '/setting',
-    target: 'setting',
+    target: '/setting',
     icon: 'table',
     menuType: 1,
     children: [
       {
         name: '网页列表',
         link: '/setting/webList',
-        target: 'webList',
+        target: '/setting/webList',
         icon: 'table',
         menuType: 2,
         children: []
@@ -34,7 +34,7 @@ const menus = [
       {
         name: '新建/编辑',
         link: '/setting/edit',
-        target: 'edit',
+        target: '/setting/edit',
         icon: '',
         menuType: 2,
         hidden: true,
@@ -53,24 +53,47 @@ const menus = [
   {
     name: '用户设置',
     link: '/userSetting',
-    target: 'userSetting',
+    target: '/userSetting',
     icon: 'tree-table',
     menuType: 1,
     children: [
       {
         name: '设置',
         link: '/userSetting/setting',
-        target: 'setting',
+        target: '/userSetting/setting',
         icon: 'tree',
         menuType: 2,
         children: []
+      },
+      {
+        name: '二级目录',
+        link: '/userSetting/second',
+        target: '/userSetting/second',
+        icon: 'tree',
+        menuType: 1,
+        children: [
+          {
+            name: '设置1',
+            link: '/userSetting/second/setting1',
+            target: '/secondD/setting1',
+            menuType: 2,
+            children: []
+          },
+          {
+            name: '设置2',
+            link: '/userSetting/second/setting2',
+            target: '/secondD/setting2',
+            menuType: 2,
+            children: []
+          }
+        ]
       }
     ]
   },
   {
     name: '预览',
     link: '/setting/overview',
-    target: 'webList',
+    target: '/setting/overview',
     icon: 'table',
     menuType: 1,
     hidden: true,
