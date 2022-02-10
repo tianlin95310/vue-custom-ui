@@ -77,6 +77,7 @@ const menus = [
             link: '/userSetting/second/setting1',
             target: '/secondD/setting1',
             menuType: 2,
+            keepAliveName: 'Setting1',
             children: []
           },
           {
@@ -84,6 +85,7 @@ const menus = [
             link: '/userSetting/second/setting2',
             target: '/secondD/setting2',
             menuType: 2,
+            keepAliveName: 'Setting2',
             children: []
           }
         ]

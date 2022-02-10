@@ -73,7 +73,7 @@ export default {
   .config-item {
     display: inline-block;
     vertical-align: top;
-    width: 30%;
+    width: 50%;
 
     .input-item-width {
       width: 80px;

@@ -30,11 +30,11 @@ function getRouterByRemote(menus) {
       meta: {
         title: menu.name,
         icon: menu.icon,
-        noCache: menu.noCache !== false,
+        noCache: !menu.keepAliveName,
         id: menu.id,
         pid: menu.pid
       },
-      name: menu.name,
+      name: menu.keepAliveName ?? menu.name,
       hidden: menu.hidden,
       redirect: menu.redirect,
       container: menu.container
@@ -123,7 +123,9 @@ function makeMenusTo2D(routers) {
       ROUTERS.push({
         component: item.component,
         path: item.path,
-        redirect: item.redirect
+        redirect: item.redirect,
+        meta: item.meta,
+        name: item.name
       })
       ROUTERS = ROUTERS.concat(makeMenusTo2D(item.children))
     } else {
@@ -151,7 +153,6 @@ const actions = {
     return new Promise(resolve => {
       // accessedRoutes = filterAsyncRoutes(asyncRoutes, menus)
       const accessedRoutes = getRouterByRemote(menus)
-      console.log('---accessedRoutes---路由', accessedRoutes)
       // 路由无法匹配走404
       accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
       // 多维路由二维处理
