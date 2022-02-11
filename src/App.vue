@@ -6,6 +6,9 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  created() {
+    console.log('navigator.language', navigator.language)
+  }
 }
 </script>
