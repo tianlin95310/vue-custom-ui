@@ -4,7 +4,7 @@
     :visible.sync="showDrawer"
     :with-header="false"
     direction="ltr"
-    size="50%"
+    size="60%"
   >
     <div class="edit-form">
       <div>
@@ -12,9 +12,9 @@
       </div>
       <div class="configs">
         <el-table :data="params">
-          <el-table-column prop="title" label="标题" width="120">
+          <el-table-column prop="key" label="Key" width="120">
             <template slot-scope="scope">
-              <el-input v-model="scope.row.key" size="mini" placeholder="请输入标题" />
+              <el-input v-model="scope.row.key" size="mini" placeholder="请输入Key" />
             </template>
           </el-table-column>
 
@@ -195,7 +195,7 @@ export default {
         top: 0;
         left: 0;
         opacity: 1;
-        color: darkred;
+        color: red;
         display: inline-block;
         cursor: pointer;
         font-size: 18px;
@@ -213,12 +213,11 @@ export default {
       }
       .icon {
         opacity: 0;
-        color: grey;
+        color: red;
         top: 0;
         left: 0;
         transition: all 0.2s ease-in;
         position: absolute;
-        //display: none;
         font-size: 0px;
       }
       input {
