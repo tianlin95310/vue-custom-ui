@@ -29,6 +29,9 @@ export default {
         comps: []
       }
     }
+  },
+  created() {
+    console.log('overview created')
   }
 }
 </script>

@@ -6,6 +6,7 @@ export default {
    * @returns {Promise<void>}
    */
   async created() {
+    console.log('minix created')
     this.$options.pageId = window.atob(this.$route.query.id)
     const json = localStorage.getItem(this.$options.pageId)
 

@@ -5,10 +5,7 @@
 <script>
 // deps for editor
 import 'codemirror/lib/codemirror.css' // codemirror
-import 'tui-editor/dist/tui-editor.css' // editor ui
-import 'tui-editor/dist/tui-editor-contents.css' // editor content
 
-import Editor from 'tui-editor'
 import defaultOptions from './default-options'
 
 export default {
@@ -85,10 +82,10 @@ export default {
   },
   methods: {
     initEditor() {
-      this.editor = new Editor({
-        el: document.getElementById(this.id),
-        ...this.editorOptions
-      })
+      // this.editor = new Editor({
+      //   el: document.getElementById(this.id),
+      //   ...this.editorOptions
+      // })
       if (this.value) {
         this.editor.setValue(this.value)
       }
