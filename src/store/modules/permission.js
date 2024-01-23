@@ -1,5 +1,6 @@
 import {
-  constantRoutes
+  constantRoutes,
+  asyncRoutes
 } from '@/router'
 import Layout from '@/layout'
 import LayoutCustom from '@/custom-ui/layout'
@@ -12,7 +13,7 @@ function hasPermission(roles, route) {
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.includes(role))
   } else {
-    return false
+    return true
   }
 }
 
@@ -149,17 +150,19 @@ const mutations = {
 const actions = {
   generateRoutes({
     commit
-  }, menus) {
+  }, { menus, roles }) {
     return new Promise(resolve => {
-      // accessedRoutes = filterAsyncRoutes(asyncRoutes, menus)
+      const accessedRoutesConstant = filterAsyncRoutes(asyncRoutes, roles)
       const accessedRoutes = getRouterByRemote(menus)
-      // 路由无法匹配走404
-      accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
       // 多维路由二维处理
       const tdRouters = get2DRouters(accessedRoutes)
-      console.log('---accessedRoutes---路由', accessedRoutes, tdRouters)
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(tdRouters)
+      // 菜单路由
+      const dirRoutes = accessedRoutesConstant.concat(accessedRoutes)
+      // 实际路由
+      const tdRoutes = tdRouters.concat(accessedRoutesConstant)
+      commit('SET_ROUTES', dirRoutes)
+      console.log('---generateRoutes---路由', menus, 'roles =', roles, dirRoutes, tdRouters)
+      resolve(tdRoutes)
     })
   }
 }
